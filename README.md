@@ -72,6 +72,28 @@ assert.deepEqual(hash10.toJSON(), {
  - Improve performance & benchmarks
  - Make integration() test at least as fast as diffpatcher
 
+## Benchmark
+
+```
+$ npm run bench
+
+> immutable-hash@0.1.0 bench /home/raynos/Documents/immutable-hash
+> node ./benchmarks
+
+# Creating a hash x 638,901 ops/sec ±3.37% (87 runs sampled)
+# Calling toJSON() x 260,465 ops/sec ±3.27% (88 runs sampled)
+# Calling get() x 362,460 ops/sec ±3.98% (79 runs sampled)
+# Calling has() x 434,228 ops/sec ±2.61% (90 runs sampled)
+# Calling patch(<object>) x 249,979 ops/sec ±3.85% (87 runs sampled)
+# Calling patch(key, value) x 215,578 ops/sec ±4.49% (88 runs sampled)
+# Calling patch(key, null) x 253,226 ops/sec ±1.55% (92 runs sampled)
+# ImmutableHash integration() x 16,233 ops/sec ±1.93% (92 runs sampled)
+# diffpatcher integration() x 30,395 ops/sec ±1.56% (94 runs sampled)
+# benchmark completed
+```
+
+ImmutableHash is half as fast as diffpatcher.
+
 ## Documentation
 
 ### `ImmutableHash()`
