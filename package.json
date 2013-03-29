@@ -1,0 +1,58 @@
+{
+  "name": "immutable-hash",
+  "version": "0.1.0",
+  "description": "An immutable hash structure with delta journaling",
+  "keywords": [],
+  "author": "Raynos <raynos2@gmail.com>",
+  "repository": "git://github.com/Raynos/immutable-hash.git",
+  "main": "index",
+  "homepage": "https://github.com/Raynos/immutable-hash",
+  "contributors": [
+    {
+      "name": "Raynos"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/Raynos/immutable-hash/issues",
+    "email": "raynos2@gmail.com"
+  },
+  "dependencies": {
+    "persistent-hash-trie": "~0.2.4",
+    "is-object": "~0.1.2"
+  },
+  "devDependencies": {
+    "tape": "~0.2.2",
+    "browserify-server": "~2.1.18",
+    "browservefy": "https://github.com/raynos/browservefy/tarball/master",
+    "tryme": "https://github.com/raynos/tryme/tarball/master",
+    "benchmark": "~1.0.0"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/Raynos/immutable-hash/raw/master/LICENSE"
+    }
+  ],
+  "scripts": {
+    "test": "node ./test/index.js",
+    "build-test": "browserify-server --bundle=test/index.js -o test/static/bundle.js --debug",
+    "tryme": "tryme ./examples --live",
+    "example": "browservefy ./examples/simple.js --browserify='browserify-server' --live --indexed=./examples -- --debug --bundle",
+    "bench": "node ./benchmarks"
+  },
+  "testling": {
+    "files": "test/index.js",
+    "browsers": [
+      "ie/8..latest",
+      "firefox/16..latest",
+      "firefox/nightly",
+      "chrome/22..latest",
+      "chrome/canary",
+      "opera/12..latest",
+      "opera/next",
+      "safari/5.1..latest",
+      "ipad/6.0..latest",
+      "iphone/6.0..latest"
+    ]
+  }
+}
