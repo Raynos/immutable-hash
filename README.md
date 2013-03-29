@@ -75,7 +75,11 @@ assert.deepEqual(hash10.toJSON(), {
 
 ### `ImmutableHash()`
 
+```hs
 ImmutableHash :: Object<String, Delta> initial -> ImHash
+```
+
+Creates an ImmutableHash with optionally initial state.
 
 ```js
 var hash = ImHash().patch({ foo: "1", bar: { baz: "2" } })
@@ -86,9 +90,11 @@ var res2 = hash2.toJSON() // { foo: "1", bar: { baz: "2" } }
 
 ### `hash().patch(...)`
 
+```hs
 patch :: ImHash -> [String] parts -> Delta value -> ImHash
 patch :: ImHash -> String path -> Delta value -> ImHash
 patch :: ImHash -> Object<String, Delta> delta -> ImHash
+```
 
 Returns a new ImHash with the patch applied to it
 
@@ -104,7 +110,9 @@ var res4 = hash4.toJSON() // { foo: "1", baz: { baz: "2" } }
 
 ### `hash().toJSON()`
 
+```hs
 toJSON :: ImHash -> Object
+```
 
 Returns a normal JavaScript object representation of the ImHash
 
@@ -115,7 +123,9 @@ var res = hash.toJSON() // { foo: "1", bar: { baz: "2" } }
 
 ### `hash().get(key)`
 
+```hs
 get :: ImHash -> String -> Any
+```
 
 Returns the value associated with the key. Can either be a key or a nested
     query key.
@@ -130,7 +140,9 @@ var baz2 = hash.get("bar.baz") // "2"
 
 ### `hash().has(key)`
 
+```hs
 has :: ImHash -> String -> Boolean
+```
 
 Returns a boolean indicating whether the key is found. Can either be a key
     or a nested query key.
@@ -148,8 +160,10 @@ var baz4 = hash.has("bar.non-exist") // false
 
 ### `hash().map(...)`
 
+```hs
 map :: ImHash<String, A> -> (A -> B) lambda -> ImHash<String, B>
 map :: ImHash -> String query -> (A -> B) -> ImHash
+```
 
 Takes a path, get's the ImHash `hash` at that location. Then patches it
     by calling a lambda function on each value in it and replacing
@@ -172,8 +186,10 @@ var newState = state.map("todos", function (todo) {
 
 ### `hash().filter(...)`
 
+```hs
 filter :: ImHash<String, A> -> (A -> Boolean) lambda -> ImHash<String, A>
 filter :: ImHash -> String query -> (A -> Boolean) -> ImHash
+```
 
 Takes a path, get's the ImHash `hash` at that location. It then patches
     it by calling a lambda function on each value in it and if the lambda
