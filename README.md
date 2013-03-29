@@ -96,10 +96,10 @@ ImmutableHash is half as fast as diffpatcher.
 
 ## Documentation
 
-### `ImmutableHash()`
+### `ImmutableHash(initialState)`
 
 ```hs
-ImmutableHash :: Object<String, Delta> initial -> ImHash
+ImmutableHash :: initial:Object<String, Any> -> ImHash
 ```
 
 Creates an ImmutableHash with optionally initial state.
@@ -111,12 +111,12 @@ var hash2 = ImHash({ foo: "1", bar: { baz: "2" } })
 var res2 = hash2.toJSON() // { foo: "1", bar: { baz: "2" } }
 ```
 
-### `hash().patch(...)`
+### `hash().patch(path, value)`
 
 ```hs
-patch :: ImHash -> [String] parts -> Delta value -> ImHash
-patch :: ImHash -> String path -> Delta value -> ImHash
-patch :: ImHash -> Object<String, Delta> delta -> ImHash
+patch :: ImHash -> parts:[String] -> value:Any -> ImHash
+patch :: ImHash -> path:String -> value:Any -> ImHash
+patch :: ImHash -> delta:Object<String, Any> -> ImHash
 ```
 
 Returns a new ImHash with the patch applied to it
@@ -181,11 +181,11 @@ var baz3 = hash.has("bar.baz") // true
 var baz4 = hash.has("bar.non-exist") // false
 ```
 
-### `hash().map(...)`
+### `hash().map(path, lambda)`
 
 ```hs
-map :: ImHash<String, A> -> (A -> B) lambda -> ImHash<String, B>
-map :: ImHash -> String query -> (A -> B) -> ImHash
+map :: ImHash<String, A> -> lambda:(A -> B) -> ImHash<String, B>
+map :: ImHash -> path:String -> (A -> B) -> ImHash
 ```
 
 Takes a path, get's the ImHash `hash` at that location. Then patches it
@@ -207,11 +207,11 @@ var newState = state.map("todos", function (todo) {
 })
 ```
 
-### `hash().filter(...)`
+### `hash().filter(path, lambda)`
 
 ```hs
-filter :: ImHash<String, A> -> (A -> Boolean) lambda -> ImHash<String, A>
-filter :: ImHash -> String query -> (A -> Boolean) -> ImHash
+filter :: ImHash<String, A> -> lambda:(A -> Boolean) -> ImHash<String, A>
+filter :: ImHash -> path:String -> (A -> Boolean) -> ImHash
 ```
 
 Takes a path, get's the ImHash `hash` at that location. It then patches
