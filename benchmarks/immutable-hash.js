@@ -1,4 +1,5 @@
 var benchmark = require("./index")
+var patch = require("diffpatcher/patch")
 var ImmutableHash = require("../index")
 
 benchmark("Creating a hash", function () {
@@ -41,7 +42,7 @@ benchmark("Calling patch(key, null)", function () {
     var res = hash.patch("foo", null)
 })
 
-benchmark("integration()", function () {
+benchmark("ImmutableHash integration()", function () {
     var hash = ImmutableHash()
 
     var hash2 = hash.patch({ foo: "bar" })
@@ -65,4 +66,34 @@ benchmark("integration()", function () {
     var hash10 = hash9.map(function (x) {
         return x.patch("prop", { live: 42 })
     })
+})
+
+benchmark("diffpatcher integration()", function() {
+    var hash = {}
+
+    var hash2 = patch(hash, { foo: "bar" })
+
+    var hash3 = patch(hash2, { "foo": "baz" })
+
+    var hash4 = patch(hash3, { "foo": null })
+
+    var hash5 = patch(hash4, { bar: { baz: true } })
+
+    var hash6 = patch(hash5, { bar: { fuux: false } })
+
+    var hash7 = patch(hash6, { bar: { baz: "hello world" } })
+
+    var hash8 = patch(hash7, {
+        bar: Object.keys(hash7.bar).reduce(function (acc, k) {
+            acc[k] = String(hash7.bar[k])
+            return acc
+        }, {})
+    })
+
+    var hash9 = patch(hash8, { baz: { one: "hello", two: "world" } })
+
+    var hash10 = Object.keys(hash9).reduce(function (acc, k) {
+        acc[k] = patch(hash9[k], { prop: { live: 42 } })
+        return acc
+    }, {})
 })
