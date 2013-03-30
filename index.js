@@ -1,12 +1,14 @@
 var persistent = require("persistent-hash-trie")
 var isObject = require("is-object")
+var Keys = require("object-keys").keys
+
 var Trie = persistent.Trie
 var assoc = persistent.assoc
 var get = persistent.get
 var has = persistent.has
 var dissoc = persistent.dissoc
-var transient = persistent.transient
-var objectKeys = require('object-keys').keys
+var persistentKeys = persistent.keys
+var mutable = persistent.mutable
 
 function ImHash(trie, diff, parts, parent) {
     this._trie = trie || Trie()
@@ -58,8 +60,8 @@ proto.patch = function ImHash_patch(parts, value) {
     ```
 */
 proto.toJSON = function ImHash_toJSON() {
-    var res = transient(this._trie)
-    var keys = objectKeys(res)
+    var res = mutable(this._trie)
+    var keys = Keys(res)
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i]
         var value = res[key]
@@ -161,8 +163,7 @@ proto.map = function ImHash_map(query, lambda) {
     }
 
     var hash = query === "" ? this : this.get(query)
-    var hashAsObject = hash.toJSON()
-    var keys = objectKeys(hashAsObject)
+    var keys = persistentKeys(hash._trie)
 
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i]
@@ -205,8 +206,7 @@ proto.filter = function ImHash_filter(query, lambda) {
 
     var hash = query === "" ? this : this.get(query)
 
-    var hashAsObject = hash.toJSON()
-    var keys = objectKeys(hashAsObject)
+    var keys = persistentKeys(hash._trie)
 
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i]
@@ -259,7 +259,10 @@ function assocKey(trie, parts, value) {
     }
     // else we must create a placeholder if it does not exist
     else {
-        var existingHash = get(trie, part) || new ImHash()
+        var existingHash = get(trie, part)
+        if (!existingHash || existingHash.type !== proto.type) {
+             existingHash = new ImHash()
+        }
         existingHash = existingHash.patch(parts.slice(1), value)
 
         trie = assoc(trie, part, existingHash)
@@ -274,7 +277,7 @@ function assocKey(trie, parts, value) {
         the deltas applied to it.
 */
 function assocObject(trie, object) {
-    var keys = objectKeys(object)
+    var keys = Keys(object)
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i]
         var value = object[key]

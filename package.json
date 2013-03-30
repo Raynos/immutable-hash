@@ -17,9 +17,9 @@
     "email": "raynos2@gmail.com"
   },
   "dependencies": {
-    "persistent-hash-trie": "~0.2.4",
+    "persistent-hash-trie": "~0.3.0",
     "is-object": "~0.1.2",
-    "object-keys": "~0.0.1"
+    "object-keys": "0.0.1"
   },
   "devDependencies": {
     "tape": "~0.2.2",
