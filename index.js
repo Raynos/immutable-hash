@@ -6,6 +6,7 @@ var get = persistent.get
 var has = persistent.has
 var dissoc = persistent.dissoc
 var transient = persistent.transient
+var objectKeys = require('object-keys').keys
 
 function ImHash(trie, diff, parts, parent) {
     this._trie = trie || Trie()
@@ -58,7 +59,7 @@ proto.patch = function ImHash_patch(parts, value) {
 */
 proto.toJSON = function ImHash_toJSON() {
     var res = transient(this._trie)
-    var keys = Object.keys(res)
+    var keys = objectKeys(res)
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i]
         var value = res[key]
@@ -161,7 +162,7 @@ proto.map = function ImHash_map(query, lambda) {
 
     var hash = query === "" ? this : this.get(query)
     var hashAsObject = hash.toJSON()
-    var keys = Object.keys(hashAsObject)
+    var keys = objectKeys(hashAsObject)
 
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i]
@@ -205,7 +206,7 @@ proto.filter = function ImHash_filter(query, lambda) {
     var hash = query === "" ? this : this.get(query)
 
     var hashAsObject = hash.toJSON()
-    var keys = Object.keys(hashAsObject)
+    var keys = objectKeys(hashAsObject)
 
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i]
@@ -273,7 +274,7 @@ function assocKey(trie, parts, value) {
         the deltas applied to it.
 */
 function assocObject(trie, object) {
-    var keys = Object.keys(object)
+    var keys = objectKeys(object)
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i]
         var value = object[key]
