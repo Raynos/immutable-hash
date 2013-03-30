@@ -16,9 +16,9 @@ function ImHash(trie, diff, parts, parent) {
 
 var proto = ImHash.prototype
 
-/*  patch :: ImHash -> [String] parts -> Delta value -> ImHash
-    patch :: ImHash -> String path -> Delta value -> ImHash
-    patch :: ImHash -> Object<String, Delta> delta -> ImHash
+/*  patch :: ImHash -> parts:[String] -> value:Any -> ImHash
+    patch :: ImHash -> path:String -> value:Any -> ImHash
+    patch :: ImHash -> delta:Object<String, Any> -> ImHash
 
     Returns a new ImHash with the patch applied to it
 
@@ -114,6 +114,7 @@ proto.get = function ImHash_get(key) {
     var baz3 = hash.has("bar.baz") // true
     var baz4 = hash.has("bar.non-exist") // false
     ```
+
 */
 proto.has = function ImHash_has(key) {
     var parts = key.split(".")
@@ -130,8 +131,8 @@ proto.has = function ImHash_has(key) {
     return has(trie, parts[i])
 }
 
-/*  map :: ImHash<String, A> -> (A -> B) lambda -> ImHash<String, B>
-    map :: ImHash -> String query -> (A -> B) -> ImHash
+/*  map :: ImHash<String, A> -> lambda:(A -> B) -> ImHash<String, B>
+    map :: ImHash -> path:String -> (A -> B) -> ImHash
 
     Takes a path, get's the ImHash `hash` at that location. Then patches it
         by calling a lambda function on each value in it and replacing
@@ -173,8 +174,8 @@ proto.map = function ImHash_map(query, lambda) {
     return query === "" ? hash : this.patch(query, hash)
 }
 
-/*  filter :: ImHash<String, A> -> (A -> Boolean) lambda -> ImHash<String, A>
-    filter :: ImHash -> String query -> (A -> Boolean) -> ImHash
+/*  filter :: ImHash<String, A> -> lambda:(A -> Boolean) -> ImHash<String, A>
+    filter :: ImHash -> path:String -> (A -> Boolean) -> ImHash
 
     Takes a path, get's the ImHash `hash` at that location. It then patches
         it by calling a lambda function on each value in it and if the lambda
@@ -221,7 +222,9 @@ proto.type = "immutable-hash@ImmutableHash"
 
 module.exports = createHash
 
-/*  createHash :: Object<String, Delta> initial -> ImHash
+/*  ImmutableHash :: initial:Object<String, Any> -> ImHash
+
+    Creates an ImmutableHash with optionally initial state.
 
     ```js
     var hash = ImHash().patch({ foo: "1", bar: { baz: "2" } })
@@ -240,7 +243,7 @@ function createHash(initial) {
     return new ImHash(trie)
 }
 
-/*  assocKey :: Trie trie -> [String] parts -> Any value -> Trie
+/*  assocKey :: trie:Trie -> parts:[String] -> value:Any -> Trie
 
     Given a list of keys and a value return a new trie with
         the value inserted in that nested key
@@ -264,7 +267,7 @@ function assocKey(trie, parts, value) {
     return trie
 }
 
-/*  assocObject :: Trie -> Object<String, Delta> -> Trie
+/*  assocObject :: Trie -> Object<String, Any> -> Trie
 
     Given an object with keys and deltas return a new trie with
         the deltas applied to it.
@@ -279,7 +282,7 @@ function assocObject(trie, object) {
     return trie
 }
 
-/* assocValue :: Trie -> String key -> Any Value -> Trie
+/* assocValue :: Trie -> key:String -> value:Any -> Trie
 
     Given a key and a value that's either an object or a simple value we return
         new Trie with the value updated at that key
