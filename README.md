@@ -81,21 +81,27 @@ $ npm run bench
 > node ./benchmarks
 
 # ImmutableHash patch()
-# --- patch(foo.bar, baz) x 564,334 ops/sec @ 1772 milliseconds elapsed
-# --- patch([foo, bar], baz) x 707,714 ops/sec @ 1413 milliseconds elapsed
-# --- patch({ foo: { bar: baz } }) x 447,427 ops/sec @ 2235 milliseconds elapsed
+# --- patch(foo.bar, baz) x 765,697 ops/sec @ 1306 milliseconds elapsed
+# --- patch([foo, bar], baz) x 738,007 ops/sec @ 1355 milliseconds elapsed
+# --- patch({ foo: { bar: baz } }) x 569,476 ops/sec @ 1756 milliseconds elapsed
+# ImmutableHash patch(key, value)
+# --- patch(foo, bar) at 0 x 862,069 ops/sec @ 116 milliseconds elapsed
+# --- patch(foo, bar) at 10 x 152,905 ops/sec @ 654 milliseconds elapsed
+# --- patch(foo, bar) at 100 x 82,372 ops/sec @ 1214 milliseconds elapsed
+# --- patch(foo, bar) at 1000 x 65,274 ops/sec @ 1532 milliseconds elapsed
+# --- nested patch(foo, bar) at 1000 x 47,755 ops/sec @ 2094 milliseconds elapsed
 # integration(0)
-# --- ImmutableHash x 20,877 ops/sec @ 479 milliseconds elapsed
-# --- diffpatcher x 21,834 ops/sec @ 458 milliseconds elapsed
+# --- ImmutableHash x 28,409 ops/sec @ 352 milliseconds elapsed
+# --- diffpatcher x 27,701 ops/sec @ 361 milliseconds elapsed
 # integration(10)
-# --- ImmutableHash x 9,542 ops/sec @ 524 milliseconds elapsed
-# --- diffpatcher x 7,072 ops/sec @ 707 milliseconds elapsed
+# --- ImmutableHash x 9,225 ops/sec @ 542 milliseconds elapsed
+# --- diffpatcher x 7,062 ops/sec @ 708 milliseconds elapsed
 # integration(100)
-# --- ImmutableHash x 964 ops/sec @ 1037 milliseconds elapsed
-# --- diffpatcher x 1,263 ops/sec @ 792 milliseconds elapsed
+# --- ImmutableHash x 1,259 ops/sec @ 794 milliseconds elapsed
+# --- diffpatcher x 1,221 ops/sec @ 819 milliseconds elapsed
 # integration(1000)
-# --- ImmutableHash x 38 ops/sec @ 5276 milliseconds elapsed
-# --- diffpatcher x 95 ops/sec @ 2101 milliseconds elapsed
+# --- ImmutableHash x 81 ops/sec @ 2466 milliseconds elapsed
+# --- diffpatcher x 111 ops/sec @ 1804 milliseconds elapsed
 ```
 
 ImmutableHash is slower at larger size hashes
@@ -237,6 +243,25 @@ var hash = ImmutableHash({
 var newState = state.filter("todos", function (todo) {
     return !todo.get("completed")
 })
+```
+
+### `hash().diff(otherHash)`
+
+```hs
+diff:: this:ImHash -> other:ImHash -> Object
+```
+
+returns an object representation of the values that are
+    different between the two hashes.
+
+This is optimized for the case where `this` is created by
+    patching `other`. Which means you can do an very efficient
+    `curr.diff(prev)` call.
+
+```js
+var hash = ImmutableHash({ foo: "bar" })
+var hash2 = hash.patch({ bar: "baz" })
+var diff = hash2.diff(hash) // { bar: "baz" }
 ```
 
 ## Installation

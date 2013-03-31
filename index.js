@@ -264,6 +264,12 @@ proto.filter = function ImHash_filter(query, lambda) {
     This is optimized for the case where `this` is created by
         patching `other`. Which means you can do an very efficient
         `curr.diff(prev)` call.
+
+    ```js
+    var hash = ImmutableHash({ foo: "bar" })
+    var hash2 = hash.patch({ bar: "baz" })
+    var diff = hash2.diff(hash) // { bar: "baz" }
+    ```
 */
 proto.diff = function ImHash_diff(other) {
     // hot path
@@ -335,17 +341,6 @@ function slowImHashDiff(current, previous) {
         }
     }
 }
-
-/*
-  var previous = from[key]
-    var current = to[key]
-    if (previous === current) return (changes = changes - 1)
-    if (typeof(current) !== "object") return diff[key] = current
-    if (typeof(previous) !== "object") return diff[key] = current
-    var delta = calculate(previous, current)
-    if (delta) diff[key] = delta
-    else changes = changes - 1
-*/
 
 proto.type = "immutable-hash@ImmutableHash"
 
