@@ -18,7 +18,6 @@ function suite(name, iterations, callback) {
     console.log("# " + name)
     callback(benchmark)
     printResult(iterations, results)
-    console.log("# " + name + " completed")
 
     function benchmark(name, callback) {
         var time = bench(callback, iterations)
