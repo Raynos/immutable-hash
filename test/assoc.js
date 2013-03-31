@@ -93,6 +93,19 @@ test("patch(object) works for many props & nested objects", function (assert) {
     assert.equal(hash2.get("two.two3"), "two3")
     assert.equal(hash2.get("two.two2.two23"), "two23")
 
+    var hash3 = hash2.patch({
+        baz: { one: "hello", two: "world" }
+    })
+    var hash4 = hash2.patch(["baz"], {
+        one: "hello",
+        two: "world"
+    })
+
+    assert.equal(hash3.get("baz.one"), "hello")
+    assert.equal(hash3.get("baz.two"), "world")
+    assert.equal(hash4.get("baz.one"), "hello")
+    assert.equal(hash4.get("baz.two"), "world")
+
     assert.end()
 })
 

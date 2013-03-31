@@ -68,7 +68,7 @@ assert.deepEqual(hash10.toJSON(), {
 ## Todo
 
  - `diff()`
- - Make `map()` and `filter()` call `patch()` once.
+ - ~~Make `map()` and `filter()` call `patch()` once.~~
  - Improve performance & benchmarks
  - Make integration() test at least as fast as diffpatcher
 

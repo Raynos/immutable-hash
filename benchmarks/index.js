@@ -1,26 +1,55 @@
 var Benchmark = require("benchmark")
-var Suite = Benchmark.Suite
 var console = require("console")
-var suite = new Suite("benchmark!")
+var timer = require("./timer")()
+var formatNumber = require("format-number")()
+var ITERATIONS = 1000 * 1000
 
-module.exports = benchmark
-
-suite.on("complete", function () {
-    this.map(function (results) {
-        if (results.error) {
-            return console.error("Error!", results.error)
-        }
-
-        console.log("# " + String(results))
-    })
-
-    console.log("# benchmark completed")
-})
+module.exports = suite
 
 require("./immutable-hash")
 
-suite.run({})
+function suite(name, iterations, callback) {
+    if (typeof iterations === "function") {
+        callback = iterations
+        iterations = null
+    }
 
-function benchmark(name, fn) {
-    suite.add(name, fn)
+    iterations = iterations || ITERATIONS
+
+    console.log("# " + name)
+    var results = []
+
+    function benchmark(name, callback) {
+        var time = bench(callback, iterations)
+
+        results.push([name, time])
+    }
+
+    callback(benchmark)
+
+    // name x count ops / sec variance (n samples)
+
+    results.forEach(function (result) {
+        var time = result[1]
+        // console.log("time?", time)
+        var frequency = Math.round(iterations / (time / 1000)) + ""
+        var hz = formatNumber(frequency)
+
+
+        console.log("# --- " + result[0] + " x " + hz + " ops/sec @ " +
+            time + " milliseconds elapsed")
+    })
+
+    console.log("# " + name + " completed")
+}
+
+function bench(fn, iterations) {
+    var result = []
+    var i = 0
+    timer("start")
+    for (var i = 0; i < iterations; i++) {
+        result.push(fn())
+    }
+
+    return timer("stop");
 }

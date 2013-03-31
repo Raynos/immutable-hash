@@ -1,6 +1,7 @@
 var persistent = require("persistent-hash-trie")
 var isObject = require("is-object")
 var Keys = require("object-keys")
+var uuid = require("uuid")
 
 var Trie = persistent.Trie
 var assoc = persistent.assoc
@@ -10,11 +11,33 @@ var dissoc = persistent.dissoc
 var persistentKeys = persistent.keys
 var mutable = persistent.mutable
 
-function ImHash(trie, diff, parts, parent) {
+var guid = 0
+
+/*  ImHash {
+        trie: Trie,
+        diff: Delta,
+        diffPath: [String],
+        parent: UUID,
+        id: UUID
+    }
+
+    an ImHash is a data structure that wraps a Trie containing it's
+        data.
+
+    It also has a `<diffPath, diff>` which represents the diff that was
+        patched to the previous `ImHash` to create this `ImHash`. The
+        diffPath may be empty which means the diff was applied at the root
+        instead of at a nested part of the data structure.
+
+    It also has a `parent` property which is the id of the previous `ImHash`
+        used to create this ImHash
+*/
+function ImHash(trie, diff, diffPath, parentId) {
     this._trie = trie || Trie()
     this._diff = diff || null
-    this._parts = parts || null
-    this._parent = parent || null
+    this._diffPath = diffPath || []
+    this._parentId = parentId || ""
+    this._id = guid++
 }
 
 var proto = ImHash.prototype
@@ -41,12 +64,15 @@ proto.patch = function ImHash_patch(parts, value) {
     }
 
     if (Array.isArray(parts)) {
-        var len = parts.length
         var trie = assocKey(this._trie, parts, value)
 
-        return new ImHash(trie, value, parts, this)
+        // trie, diffValue, diffPath, parentId
+        return new ImHash(trie, value, parts, this._id)
     } else if (isObject(parts)) {
-        return new ImHash(assocObject(this._trie, parts), parts, null, this)
+        var trie = assocObject(this._trie, parts)
+
+        // trie, diffValue, empty path, parentId
+        return new ImHash(trie, parts, [], this._id)
     }
 }
 
@@ -164,14 +190,17 @@ proto.map = function ImHash_map(query, lambda) {
 
     var hash = query === "" ? this : this.get(query)
     var keys = persistentKeys(hash._trie)
+    var diff = {}
 
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i]
         var value = hash.get(key)
         var res = lambda(value, key)
 
-        hash = hash.patch(key, res)
+        diff[key] = res
     }
+
+    hash = hash.patch(diff)
 
     return query === "" ? hash : this.patch(query, hash)
 }
@@ -207,15 +236,18 @@ proto.filter = function ImHash_filter(query, lambda) {
     var hash = query === "" ? this : this.get(query)
 
     var keys = persistentKeys(hash._trie)
+    var diff = {}
 
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i]
         var value = hash.get(key)
         var keep = lambda(value, key)
         if (!keep) {
-            hash = hash.patch(key, null)
+            diff[key] = null
         }
     }
+
+    hash = hash.patch(diff)
 
     return query === "" ? hash : this.patch(query, hash)
 }
