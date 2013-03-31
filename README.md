@@ -77,22 +77,28 @@ assert.deepEqual(hash10.toJSON(), {
 ```
 $ npm run bench
 
-> immutable-hash@0.1.0 bench /home/raynos/Documents/immutable-hash
+> immutable-hash@0.1.2 bench /home/raynos/Documents/immutable-hash
 > node ./benchmarks
 
-# Creating a hash x 638,901 ops/sec ±3.37% (87 runs sampled)
-# Calling toJSON() x 260,465 ops/sec ±3.27% (88 runs sampled)
-# Calling get() x 362,460 ops/sec ±3.98% (79 runs sampled)
-# Calling has() x 434,228 ops/sec ±2.61% (90 runs sampled)
-# Calling patch(<object>) x 249,979 ops/sec ±3.85% (87 runs sampled)
-# Calling patch(key, value) x 215,578 ops/sec ±4.49% (88 runs sampled)
-# Calling patch(key, null) x 253,226 ops/sec ±1.55% (92 runs sampled)
-# ImmutableHash integration() x 16,233 ops/sec ±1.93% (92 runs sampled)
-# diffpatcher integration() x 30,395 ops/sec ±1.56% (94 runs sampled)
-# benchmark completed
+# ImmutableHash patch()
+# --- patch(foo.bar, baz) x 564,334 ops/sec @ 1772 milliseconds elapsed
+# --- patch([foo, bar], baz) x 707,714 ops/sec @ 1413 milliseconds elapsed
+# --- patch({ foo: { bar: baz } }) x 447,427 ops/sec @ 2235 milliseconds elapsed
+# integration(0)
+# --- ImmutableHash x 20,877 ops/sec @ 479 milliseconds elapsed
+# --- diffpatcher x 21,834 ops/sec @ 458 milliseconds elapsed
+# integration(10)
+# --- ImmutableHash x 9,542 ops/sec @ 524 milliseconds elapsed
+# --- diffpatcher x 7,072 ops/sec @ 707 milliseconds elapsed
+# integration(100)
+# --- ImmutableHash x 964 ops/sec @ 1037 milliseconds elapsed
+# --- diffpatcher x 1,263 ops/sec @ 792 milliseconds elapsed
+# integration(1000)
+# --- ImmutableHash x 38 ops/sec @ 5276 milliseconds elapsed
+# --- diffpatcher x 95 ops/sec @ 2101 milliseconds elapsed
 ```
 
-ImmutableHash is half as fast as diffpatcher.
+ImmutableHash is slower at larger size hashes
 
 ## Documentation
 
