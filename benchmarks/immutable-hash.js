@@ -18,6 +18,38 @@ suite("ImmutableHash patch()", function (benchmark) {
     })
 })
 
+suite("ImmutableHash patch(key, value)", 100 * 1000, function (benchmark) {
+    var initial_0 = ImmutableHash(generateData(0))
+    var initial_10 = ImmutableHash(generateData(10))
+    var initial_100 = ImmutableHash(generateData(100))
+    var initial_1000 = ImmutableHash(generateData(1000))
+
+    benchmark("patch(foo, bar) at 0", function () {
+        var hash = initial_0.patch("foo", "bar")
+    })
+
+    benchmark("patch(foo, bar) at 10", function () {
+        var hash = initial_10.patch("foo", "bar")
+    })
+
+    benchmark("patch(foo, bar) at 100", function () {
+        var hash = initial_100.patch("foo", "bar")
+    })
+
+    benchmark("patch(foo, bar) at 1000", function () {
+        var hash = initial_1000.patch("foo", "bar")
+    })
+
+    benchmark("nested patch(foo, bar) at 1000", function () {
+        var hash = initial_1000.patch({
+            foo: {
+                bar: { baz: true, foz: false }
+                , fuux: 42
+            }
+        })
+    })
+})
+
 ;[
     [0, 10000],
     [10, 5000],

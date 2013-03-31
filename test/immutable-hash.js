@@ -175,3 +175,35 @@ test("can call filter to remove items", function (assert) {
 
     assert.end()
 })
+
+test("can diff two structures", function (assert) {
+    var hash = ImmutableHash({
+        foo: "bar"
+    })
+    var hash2 = hash.patch("bar", "baz")
+    var diff1 = hash2.diff(hash)
+
+    assert.deepEqual(diff1, { bar: "baz" })
+
+    var hash3 = hash2.patch("foo.bar.baz.blargh.bawfawf", "oh hi")
+    var diff2 = hash3.diff(hash2)
+
+    assert.deepEqual(diff2, { foo: { bar: { baz: {
+        blargh: { bawfawf: "oh hi" } }
+    } } })
+
+    var diff3 = hash3.diff(hash)
+
+    assert.deepEqual(diff3, {
+        bar: "baz",
+        foo: {
+            bar: {
+                baz: {
+                    blargh: { bawfawf: "oh hi" }
+                }
+            }
+        }
+    })
+
+    assert.end()
+})

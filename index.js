@@ -12,10 +12,11 @@ var persistentKeys = persistent.keys
 var mutable = persistent.mutable
 
 var guid = 0
+var nil = {}
 
 /*  ImHash {
         trie: Trie,
-        diff: Delta,
+        diffValue: Delta,
         diffPath: [String],
         parent: UUID,
         id: UUID
@@ -34,10 +35,13 @@ var guid = 0
 */
 function ImHash(trie, diff, diffPath, parentId) {
     this._trie = trie || Trie()
-    this._diff = diff || null
+    this._diffValue = diff || null
     this._diffPath = diffPath || []
-    this._parentId = parentId || ""
+    this._parentId = parentId !== undefined ? parentId : -1
+    this._delta = this._diffPath.length === 0 ? this._diffValue : null
     this._id = guid++
+
+    // console.log("Imhash", trie && mutable(trie), parentId, this._parentId)
 }
 
 var proto = ImHash.prototype
@@ -251,6 +255,98 @@ proto.filter = function ImHash_filter(query, lambda) {
 
     return query === "" ? hash : this.patch(query, hash)
 }
+
+/*  diff:: this:ImHash -> other:ImHash -> Object
+
+    returns an object representation of the values that are
+        different between the two hashes.
+
+    This is optimized for the case where `this` is created by
+        patching `other`. Which means you can do an very efficient
+        `curr.diff(prev)` call.
+*/
+proto.diff = function ImHash_diff(other) {
+    // hot path
+    if (this._parentId === other._id) {
+        if (this._delta) {
+            return this._delta
+        }
+
+        var diffPath = this._diffPath
+        var len = diffPath.length
+        var diffValue = this._diffValue
+        var delta = this._delta = {}
+        var obj = delta
+
+        for (var i = 0; i < len; i++) {
+            var key = diffPath[i]
+            if (i === len - 1) {
+                obj[key] = diffValue
+                return delta
+            }
+
+            obj = (obj[key] = {})
+        }
+    }
+
+    return slowImHashDiff(this, other)
+}
+
+function slowImHashDiff(current, previous) {
+    var diff = {}
+
+    var previousKeys = persistentKeys(previous._trie)
+    for (var i = 0; i < previousKeys.length; i++) {
+        var key = previousKeys[i]
+
+        if (!current.has(key)) {
+            diff[key] = null
+        }
+    }
+
+    var currKeys = persistentKeys(current._trie)
+    for (var j = 0; j < currKeys.length; j++) {
+        var key = currKeys[j]
+        var currentValue = current.get(key)
+        var previousValue = previous.get(key)
+        var delta = checkDifference(currentValue, previousValue)
+
+        if (delta !== nil) {
+            diff[key] = delta
+        }
+    }
+
+    return diff
+
+    function checkDifference(currentValue, previousValue) {
+        if (currentValue === previousValue &&
+            currentValue.type !== proto.type
+        ) {
+            return nil
+        }
+
+        if (!isObject(currentValue)) {
+            return currentValue
+        } else if (!isObject(previousValue)) {
+            return isObject(currentValue) ?
+                currentValue.toJSON() : currentValue
+        } else {
+            return slowImHashDiff(currentValue, previousValue)
+        }
+    }
+}
+
+/*
+  var previous = from[key]
+    var current = to[key]
+    if (previous === current) return (changes = changes - 1)
+    if (typeof(current) !== "object") return diff[key] = current
+    if (typeof(previous) !== "object") return diff[key] = current
+    var delta = calculate(previous, current)
+    if (delta) diff[key] = delta
+    else changes = changes - 1
+*/
+
 proto.type = "immutable-hash@ImmutableHash"
 
 module.exports = createHash
