@@ -4,46 +4,6 @@ var ImmutableHash = require("../index")
 var suite = require("./index")
 var generateData = require("./generateData")
 
-// benchmark("Creating a hash", function () {
-//     var hash = ImmutableHash({ foo: "bar", baz: "fuux" })
-// })
-
-// benchmark("Calling toJSON()", function () {
-//     var hash = ImmutableHash({ foo: "bar", baz: "fuux" })
-
-//     var res = hash.toJSON()
-// })
-
-// benchmark("Calling get()", function () {
-//     var hash = ImmutableHash({ foo: "bar", baz: "fuux" })
-
-//     var res = hash.get("foo")
-// })
-
-// benchmark("Calling has()", function () {
-//     var hash = ImmutableHash({ foo: "bar", baz: "fuux" })
-
-//     var res = hash.has("foo")
-// })
-
-// benchmark("Calling patch(<object>)", function () {
-//     var hash = ImmutableHash({ foo: "bar", baz: "fuux" })
-
-//     var res = hash.patch({ foo: "baz" })
-// })
-
-// benchmark("Calling patch(key, value)", function () {
-//     var hash = ImmutableHash({ foo: "bar", baz: "fuux" })
-
-//     var res = hash.patch("foo", "baz")
-// })
-
-// benchmark("Calling patch(key, null)", function () {
-//     var hash = ImmutableHash({ foo: "bar", baz: "fuux" })
-
-//     var res = hash.patch("foo", null)
-// })
-
 suite("ImmutableHash patch()", function (benchmark) {
     benchmark("patch(foo.bar, baz)", function () {
         var hash = ImmutableHash().patch("foo.bar", "baz")
@@ -92,7 +52,7 @@ suite("ImmutableHash patch()", function (benchmark) {
         })
 
         benchmark("diffpatcher", function() {
-            var hash = initial
+            var hash = patch(initial, {})
 
             var hash2 = patch(hash, { foo: "bar" })
 

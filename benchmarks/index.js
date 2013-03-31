@@ -1,6 +1,4 @@
-var Benchmark = require("benchmark")
 var console = require("console")
-var timer = require("./timer")()
 var formatNumber = require("format-number")()
 var ITERATIONS = 1000 * 1000
 
@@ -14,21 +12,22 @@ function suite(name, iterations, callback) {
         iterations = null
     }
 
+    var results = []
     iterations = iterations || ITERATIONS
 
     console.log("# " + name)
-    var results = []
+    callback(benchmark)
+    printResult(iterations, results)
+    console.log("# " + name + " completed")
 
     function benchmark(name, callback) {
         var time = bench(callback, iterations)
 
         results.push([name, time])
     }
+}
 
-    callback(benchmark)
-
-    // name x count ops / sec variance (n samples)
-
+function printResult(iterations, results) {
     results.forEach(function (result) {
         var time = result[1]
         // console.log("time?", time)
@@ -39,17 +38,17 @@ function suite(name, iterations, callback) {
         console.log("# --- " + result[0] + " x " + hz + " ops/sec @ " +
             time + " milliseconds elapsed")
     })
-
-    console.log("# " + name + " completed")
 }
 
 function bench(fn, iterations) {
     var result = []
     var i = 0
-    timer("start")
+    var start = Date.now()
     for (var i = 0; i < iterations; i++) {
         result.push(fn())
     }
 
-    return timer("stop");
+    var end = Date.now()
+
+    return end - start;
 }
