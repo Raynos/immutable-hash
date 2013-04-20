@@ -2,6 +2,7 @@ var patch = require("diffpatcher/patch")
 var ImmutableHash = require("../index")
 var keys = require('object-keys);
 var forEach = require('foreach');
+var reduce = require('reduce');
 
 var suite = require("./index")
 var generateData = require("./generateData")
@@ -101,7 +102,7 @@ suite("ImmutableHash patch(key, value)", 100 * 1000, function (benchmark) {
             var hash7 = patch(hash6, { bar: { baz: "hello world" } })
 
             var hash8 = patch(hash7, {
-                bar: keys(hash7.bar).reduce(function (acc, k) {
+                bar: reduce(hash7.bar, function (acc, k) {
                     acc[k] = String(hash7.bar[k])
                     return acc
                 }, {})
