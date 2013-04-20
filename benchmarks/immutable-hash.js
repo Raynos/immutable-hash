@@ -1,6 +1,7 @@
 var patch = require("diffpatcher/patch")
 var ImmutableHash = require("../index")
 var keys = require('object-keys);
+var forEach = require('foreach');
 
 var suite = require("./index")
 var generateData = require("./generateData")
@@ -51,12 +52,12 @@ suite("ImmutableHash patch(key, value)", 100 * 1000, function (benchmark) {
     })
 })
 
-;[
+;forEach([
     [0, 10000],
     [10, 5000],
     [100, 1000],
     [1000, 200]
-].forEach(function (tuple) {
+], function (tuple) {
     var size = tuple[0]
     var iterations = tuple[1]
     suite("integration(" + size + ")", iterations, function (benchmark) {

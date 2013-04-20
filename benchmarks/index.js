@@ -1,6 +1,7 @@
 var console = require("console")
 var formatNumber = require("format-number")()
 var ITERATIONS = 1000 * 1000
+var forEach = require('foreach')
 
 module.exports = suite
 
@@ -27,7 +28,7 @@ function suite(name, iterations, callback) {
 }
 
 function printResult(iterations, results) {
-    results.forEach(function (result) {
+    forEach(results, function (result) {
         var time = result[1]
         // console.log("time?", time)
         var frequency = Math.round(iterations / (time / 1000)) + ""
