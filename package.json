@@ -24,7 +24,7 @@
     "reduce": "~0.1.0"
   },
   "devDependencies": {
-    "tape": "~0.3.3",
+    "tape": "~1.0.1",
     "browserify-server": "~2.1.18",
     "browservefy": "https://github.com/raynos/browservefy/tarball/master",
     "tryme": "https://github.com/raynos/tryme/tarball/master",
