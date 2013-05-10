@@ -17,12 +17,14 @@
     "email": "raynos2@gmail.com"
   },
   "dependencies": {
+    "foreach": "~2.0.3",
     "persistent-hash-trie": "~0.3.1",
     "is-object": "~0.1.2",
-    "object-keys": "~0.1.2"
+    "object-keys": "~0.1.7",
+    "reduce": "~0.1.0"
   },
   "devDependencies": {
-    "tape": "~0.3.2",
+    "tape": "~1.0.1",
     "browserify-server": "~2.1.18",
     "browservefy": "https://github.com/raynos/browservefy/tarball/master",
     "tryme": "https://github.com/raynos/tryme/tarball/master",
@@ -48,7 +50,7 @@
   "testling": {
     "files": "test/index.js",
     "browsers": [
-      "ie/8..latest",
+      "ie/6..latest",
       "firefox/16..latest",
       "firefox/nightly",
       "chrome/22..latest",
