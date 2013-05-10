@@ -1,7 +1,6 @@
 var persistent = require("persistent-hash-trie")
 var isObject = require("is-object")
 var Keys = require("object-keys")
-var uuid = require("uuid")
 
 var Trie = persistent.Trie
 var assoc = persistent.assoc
