@@ -66,13 +66,15 @@ proto.patch = function ImHash_patch(parts, value) {
         parts = parts.split(".")
     }
 
+    var trie
+
     if (Array.isArray(parts)) {
-        var trie = assocKey(this._trie, parts, value)
+        trie = assocKey(this._trie, parts, value)
 
         // trie, diffValue, diffPath, parentId
         return new ImHash(trie, value, parts, this._id)
     } else if (isObject(parts)) {
-        var trie = assocObject(this._trie, parts)
+        trie = assocObject(this._trie, parts)
 
         // trie, diffValue, empty path, parentId
         return new ImHash(trie, parts, [], this._id)
@@ -299,10 +301,11 @@ proto.diff = function ImHash_diff(other) {
 
 function slowImHashDiff(current, previous) {
     var diff = {}
+    var key
 
     var previousKeys = persistentKeys(previous._trie)
     for (var i = 0; i < previousKeys.length; i++) {
-        var key = previousKeys[i]
+        key = previousKeys[i]
 
         if (!current.has(key)) {
             diff[key] = null
@@ -311,7 +314,7 @@ function slowImHashDiff(current, previous) {
 
     var currKeys = persistentKeys(current._trie)
     for (var j = 0; j < currKeys.length; j++) {
-        var key = currKeys[j]
+        key = currKeys[j]
         var currentValue = current.get(key)
         var previousValue = previous.get(key)
         var delta = checkDifference(currentValue, previousValue)
@@ -373,7 +376,6 @@ function createHash(initial) {
 */
 function assocKey(trie, parts, value) {
     var part = parts[0]
-    var len = parts.length
 
     // if parts.length === 1 then just assoc
     if (parts.length === 1) {
@@ -383,7 +385,7 @@ function assocKey(trie, parts, value) {
     else {
         var existingHash = get(trie, part)
         if (!existingHash || existingHash.type !== proto.type) {
-             existingHash = new ImHash()
+            existingHash = new ImHash()
         }
         existingHash = existingHash.patch(parts.slice(1), value)
 
