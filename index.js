@@ -1,6 +1,9 @@
 var persistent = require("persistent-hash-trie")
 var isObject = require("is-object")
 var Keys = require("object-keys")
+var isArray = Array.isArray || function (arr) {
+    return Object.prototype.toString.call(arr) === '[object Array]'
+}
 
 var Trie = persistent.Trie
 var assoc = persistent.assoc
@@ -68,7 +71,7 @@ proto.patch = function ImHash_patch(parts, value) {
 
     var trie
 
-    if (Array.isArray(parts)) {
+    if (isArray(parts)) {
         trie = assocKey(this._trie, parts, value)
 
         // trie, diffValue, diffPath, parentId
