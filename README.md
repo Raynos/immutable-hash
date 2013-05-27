@@ -125,10 +125,11 @@ var res2 = hash2.toJSON() // { foo: "1", bar: { baz: "2" } }
 
 ### `hash().patch(path, value)`
 
-```hs
-patch :: ImHash -> parts:[String] -> value:Any -> ImHash
-patch :: ImHash -> path:String -> value:Any -> ImHash
-patch :: ImHash -> delta:Object<String, Any> -> ImHash
+```js
+type KeyPath = [String] | String
+
+patch := (previous: ImHash, key: KeyPath, value: Any) => current: ImHash
+patch := (previous: ImHash, delta: Object<KeyPath, Any>) => current: ImHash
 ```
 
 Returns a new ImHash with the patch applied to it
