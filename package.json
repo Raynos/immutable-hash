@@ -17,11 +17,11 @@
     "email": "raynos2@gmail.com"
   },
   "dependencies": {
-    "foreach": "~2.0.3",
-    "persistent-hash-trie": "~0.3.2",
+    "foreach": "~2.0.4",
+    "persistent-hash-trie": "~0.4.1",
     "is-object": "~0.1.2",
-    "object-keys": "~0.3.0",
-    "reduce": "~0.1.0"
+    "object-keys": "~0.4.0",
+    "reduce": "~0.1.2"
   },
   "devDependencies": {
     "tape": "~1.0.2",
