@@ -24,7 +24,7 @@
     "reduce": "~0.1.2"
   },
   "devDependencies": {
-    "tape": "~1.0.2",
+    "tape": "~1.1.0",
     "browserify-server": "~2.1.18",
     "browservefy": "https://github.com/raynos/browservefy/tarball/master",
     "tryme": "https://github.com/raynos/tryme/tarball/master",
@@ -32,7 +32,7 @@
     "diffpatcher": "~1.0.1",
     "uuid": "~1.4.1",
     "string-hash": "~1.1.0",
-    "format-number": "0.0.0"
+    "format-number": "~1.0.2"
   },
   "licenses": [
     {
