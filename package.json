@@ -20,16 +20,16 @@
     "foreach": "~2.0.4",
     "persistent-hash-trie": "~0.4.1",
     "is-object": "~0.1.2",
-    "object-keys": "~0.4.0",
+    "object-keys": "~0.5.0",
     "reduce": "~0.1.2"
   },
   "devDependencies": {
-    "tape": "~1.1.0",
+    "tape": "~2.5.0",
     "browserify-server": "~2.1.18",
     "browservefy": "https://github.com/raynos/browservefy/tarball/master",
     "tryme": "https://github.com/raynos/tryme/tarball/master",
     "benchmark": "~1.0.0",
-    "diffpatcher": "~1.0.1",
+    "diffpatcher": "~1.2.0",
     "uuid": "~1.4.1",
     "string-hash": "~1.1.0",
     "format-number": "~1.0.2"
