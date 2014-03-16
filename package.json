@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "tape": "~2.10.2",
+    "covert": "~0.3.1",
     "browserify-server": "~2.1.18",
     "browservefy": "~0.0.10",
     "tryme": "https://github.com/raynos/tryme/tarball/master",
@@ -41,7 +42,9 @@
     }
   ],
   "scripts": {
-    "test": "node ./test/index.js",
+    "test": "node test/index.js",
+    "coverage": "covert test/index.js",
+    "coverage-quiet": "covert --quiet test/index.js",
     "build-test": "browserify-server --bundle=test/index.js -o test/static/bundle.js --debug",
     "tryme": "tryme ./examples --live",
     "example": "browservefy ./examples/simple.js --browserify='browserify-server' --live --indexed=./examples -- --debug --bundle",
