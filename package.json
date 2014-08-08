@@ -20,7 +20,7 @@
     "foreach": "~2.0.4",
     "persistent-hash-trie": "~0.4.1",
     "is-object": "~0.1.2",
-    "object-keys": "~0.5.1",
+    "object-keys": "~0.6.0",
     "reduce": "~0.1.2"
   },
   "devDependencies": {
