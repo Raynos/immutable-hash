@@ -19,7 +19,7 @@
   "dependencies": {
     "foreach": "~2.0.4",
     "persistent-hash-trie": "~0.4.1",
-    "is-object": "~0.1.2",
+    "is-object": "~1.0.0",
     "object-keys": "~0.6.0",
     "reduce": "~1.0.0"
   },
