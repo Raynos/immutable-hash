@@ -18,10 +18,10 @@
   },
   "dependencies": {
     "foreach": "~2.0.4",
-    "persistent-hash-trie": "~0.4.1",
-    "is-object": "~1.0.0",
-    "object-keys": "~1.0.0",
-    "reduce": "~1.0.0"
+    "persistent-hash-trie": "~0.4.2",
+    "is-object": "~1.0.1",
+    "object-keys": "~1.0.1",
+    "reduce": "~1.0.1"
   },
   "devDependencies": {
     "tape": "~2.14.0",
