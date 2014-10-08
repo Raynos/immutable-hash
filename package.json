@@ -24,7 +24,7 @@
     "reduce": "~1.0.1"
   },
   "devDependencies": {
-    "tape": "~2.14.0",
+    "tape": "~3.0.0",
     "covert": "~1.0.0",
     "browserify-server": "~2.1.18",
     "browservefy": "~0.0.10",
